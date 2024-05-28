@@ -70,5 +70,5 @@ lifeCycleConfig:
 webUI:
   - url: "https://[CI_CD_DOMAIN]"
     label: "Akaunting Admin"
-    login: "Administrator"
+    login: "[ADMIN_EMAIL]"
     password: "[ADMIN_PASSWORD]"

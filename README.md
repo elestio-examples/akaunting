@@ -13,7 +13,7 @@ Deploy Akaunting server with CI/CD on Elestio
 You can open Akaunting UI here:
 
     URL: https://[CI_CD_DOMAIN]
-    login: Administrator
+    login: [ADMIN_EMAIL]
     password: [ADMIN_PASSWORD]
 
 You can open phpMyAdmin UI here:
