@@ -1,0 +1,63 @@
+version: "3.7"
+
+services:
+  akaunting:
+    image: docker.io/akaunting/akaunting:${SOFTWARE_VERSION_TAG}
+    ports:
+      - 172.17.0.1:20790:80
+    volumes:
+      - akaunting-data:/var/www/html/storage
+    restart: always
+    environment:
+      - AKAUNTING_SETUP=true
+      - APP_URL=https://${DOMAIN}
+      - LOCALE=en-US
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_NAME=${DB_NAME}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_PREFIX=asd_
+      - COMPANY_NAME=${COMPANY_NAME}
+      - COMPANY_EMAIL=${ADMIN_EMAIL}
+      - ADMIN_EMAIL=${ADMIN_EMAIL}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+    depends_on:
+      - akaunting-db
+
+  akaunting-db:
+    image: elestio/mariadb:11.2
+    volumes:
+      - ./akaunting-db:/var/lib/mysql
+    restart: always
+    environment:
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_USER=${DB_USERNAME}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+
+  pma:
+    image: elestio/phpmyadmin
+    restart: always
+    links:
+      - akaunting-db:akaunting-db
+    ports:
+      - "172.17.0.1:41524:80"
+    environment:
+      PMA_HOST: ${DB_HOST}
+      PMA_PORT: ${DB_PORT}
+      PMA_USER: root
+      PMA_PASSWORD: ${ADMIN_PASSWORD}
+      UPLOAD_LIMIT: 500M
+      MYSQL_USERNAME: root
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    depends_on:
+      - akaunting-db
+
+volumes:
+  akaunting-data:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${PWD}/akaunting-data
+      o: bind
