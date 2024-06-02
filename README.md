@@ -4,7 +4,7 @@
 
 Deploy Akaunting server with CI/CD on Elestio
 
-<img src="akaunting.png" style='width: 200px;'/>
+<img src="akaunting.png" style='width: 100%;'/>
 <br/>
 <br/>
 
